@@ -23,22 +23,6 @@ export class TimerModule extends Module {
       <button class="timer-cancel">×</button>
     `;
 
-		// Стили для таймера
-		timerElement.style.cssText = `
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      background: rgba(0, 0, 0, 0.8);
-      color: white;
-      padding: 15px;
-      border-radius: 10px;
-      font-family: 'Roboto', sans-serif;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      z-index: 1000;
-    `;
-
 		document.body.appendChild(timerElement);
 
 		// Запускаем отсчет
