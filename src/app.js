@@ -7,7 +7,7 @@ import { ShapeModule } from "./modules/shape.module";
 // Инициализация меню
 const menu = new ContextMenu("#menu");
 
-// Добавление модулей
+// Добавление обычных модулей
 menu.add(new TimerModule());
 menu.add(new BackgroundModule());
 menu.add(new ShapeModule());
