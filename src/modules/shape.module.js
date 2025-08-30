@@ -52,10 +52,22 @@ export class ShapeModule extends Module {
             shape.style.borderRight = `${size / 2}px solid transparent`//два прозрачных края
             shape.style.borderBottom = `${size}px solid ${getRandomColor()}`
         }
+    
+
+
+        shape.addEventListener('mouseover',()=>{
+            // shape.style.background = getRandomColor()
+            shape.style.transform = 'scale(2)'
+        })
+        shape.addEventListener('mouseleave',()=>{
+            shape.style.transform = 'scale(1)'
+        })
         shape.addEventListener('click',()=>{
             shape.remove()
         })
         
+      
+
         body.append(shape)
     }
 
