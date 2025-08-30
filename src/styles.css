@@ -40,3 +40,58 @@ body {
 .menu .menu-item:hover {
     background: #343434;
 }
+
+.custom-timer {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    padding: 15px;
+    border-radius: 10px;
+    font-family: 'Roboto', sans-serif;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.timer-display {
+    font-size: 1.2rem;
+    font-weight: bold;
+    min-width: 60px;
+    text-align: center;
+}
+
+.timer-cancel {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.2s;
+}
+
+.timer-cancel:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Анимация для появления/исчезновения меню */
+.menu {
+    opacity: 0;
+    transform: scale(0.95);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.menu.open {
+    opacity: 1;
+    transform: scale(1);
+}
