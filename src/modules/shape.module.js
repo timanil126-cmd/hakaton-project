@@ -1,59 +1,61 @@
-import { Module } from "../core/module";
-import { random } from "../utils";
+import {Module} from '../core/module'
+import {random} from '../utils'
 
 export class ShapeModule extends Module {
-	constructor() {
-		super("shape", "Случайная фигура");
-	}
+    constructor(){
+        super('shape','случайная фигура')
+    }
 
-	trigger() {
-		this.createRandomShape();
-	}
+    trigger(){
+        this.createRandomSheape()
+    }
+    
+    createRandomSheape(){
+        const body = document.querySelector('body')
+        body.style.position = 'relative'
+        function getRandomColor() {
+            let letters = "0123456789ABCDEF";
+            let color = "#";
+            for (let i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
 
-	createRandomShape() {
-		const shape = document.createElement("div");
 
-		// Случайные параметры
-		const size = random(50, 200);
-		const colors = ["#FF6B6B", "#4ECDC4", "#45B7D1", "#FFBE0B", "#FB5607"];
-		const shapes = ["circle", "square", "triangle"];
-		const randomShape = shapes[random(0, shapes.length - 1)];
+        const availHeight = window.screen.availHeight
+        const availWidth = window.screen.availWidth
+        const size = random(50,200)
+        const distanceRelativeToScreenHeight = random(0,availHeight)
+        const distanceRelativeToScreenWidth = random(0,availWidth)
 
-		shape.style.cssText = `
-      position: absolute;
-      width: ${size}px;
-      height: ${size}px;
-      background: ${colors[random(0, colors.length - 1)]};
-      top: ${random(0, window.innerHeight - size)}px;
-      left: ${random(0, window.innerWidth - size)}px;
-      border-radius: ${randomShape === "circle" ? "50%" : "0"};
-      cursor: pointer;
-      transition: transform 0.3s ease;
-    `;
+        const shape = document.createElement('div')
+        shape.style.width = `${size}px`
+        shape.style.height = `${size}px`
+        shape.style.position = 'absolute'
+        shape.style.background = getRandomColor()
+        shape.style.top = `${distanceRelativeToScreenHeight}px`
+        shape.style.left = `${distanceRelativeToScreenWidth}px`
+    
+        const randomForm = Math.random();   
+        if (randomForm <= 0.5) {
+            shape.style.borderRadius = '50%';
+        }
 
-		if (randomShape === "triangle") {
-			shape.style.width = "0";
-			shape.style.height = "0";
-			shape.style.background = "transparent";
-			shape.style.borderLeft = `${size / 2}px solid transparent`;
-			shape.style.borderRight = `${size / 2}px solid transparent`;
-			shape.style.borderBottom = `${size}px solid ${
-				colors[random(0, colors.length - 1)]
-			}`;
-		}
+        shape.addEventListener('mouseover',()=>{
+            shape.style.background = getRandomColor()
+            shape.style.transform = 'scale(2)'
+        })
+        shape.addEventListener('mouseleave',()=>{
+            shape.style.transform = 'scale(1)'
+        })
+        shape.addEventListener('click',()=>{
+            shape.remove()
+        })
+        
+      
 
-		shape.addEventListener("click", () => {
-			shape.remove();
-		});
+        body.append(shape)
+    }
 
-		shape.addEventListener("mouseenter", () => {
-			shape.style.transform = "scale(1.1)";
-		});
-
-		shape.addEventListener("mouseleave", () => {
-			shape.style.transform = "scale(1)";
-		});
-
-		document.body.appendChild(shape);
-	}
 }
