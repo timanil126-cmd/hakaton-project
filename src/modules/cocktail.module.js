@@ -3,26 +3,167 @@ import { Module } from "../core/module";
 export class CocktailModule extends Module {
 	constructor() {
 		super('Cocktail', 'Случайный коктейль')
-		this.apiUrl = 'www.thecocktaildb.com/api/json/v1/1/random.php';
+		this.apiUrl = 'https://www.thecocktaildb.com/api/json/v1/1/random.php';
 	}
-	trigger() {
+	async trigger() {
+		try {
+			const data = await this.getRandomCocktail();
+			if (!data || !data.drinks || data.drinks.length === 0) {
+				alert("Не удалось получить коктейль");
+				return;
+			}
+			const drink = data.drinks[0];
+			if(drink) {
+				this.renderCocktailModal(drink);
+			}
+
+		} catch (error) {
+			
+		}
 
 	}
 
 	async getRandomCocktail() {
 		try {
-			const res = await fetch(apiUrl);
+			const res = await fetch(this.apiUrl);
 			if(!res.ok) {
-				throw new Error (`Ошибка при получении коктейля. Статус ${res.status}`)
+				throw new Error (`Ошибка при получении коктейля. Статус ${res.status}`);
 			}
-			console.log(res)
 			const data = await res.json();
-			console.log(data)
-
+			console.log(data);
+			return data;
 		} catch (error) {
 			console.error('Ошибка при получении коктейля:', error);
 			return null
 		}
+	}
+
+	collectIngredients(drink) {
+		const ingredients = [];
+		for (let i = 1; i <= 15; i++) {
+			const ingr = drink[`strIngredient${i}`];
+			const measure = drink[`strMeasure${i}`];
+			if (ingr && ingr.trim()) {
+				const line = measure && measure.trim() ? `${ingr} — ${measure.trim()}` : ingr;
+				ingredients.push(line);
+			}
+		}
+		return ingredients;
+	}
+
+	renderCocktailModal(drink) {
+		const existing = document.querySelector(".cocktail-modal-overlay");
+		if (existing) existing.remove();
+
+		const overlay = document.createElement("div");
+		overlay.className = "cocktail-modal-overlay";
+		overlay.style.cssText = `
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.6);
+      z-index: 100000;
+    `;
+
+		const modal = document.createElement("div");
+		modal.className = "cocktail-modal";
+		modal.style.cssText = `
+      max-width: 800px;
+      width: 90%;
+      max-height: 85vh;
+      overflow: auto;
+      background: #fff;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      font-family: sans-serif;
+    `;
+
+		const closeBtn = document.createElement("button");
+		closeBtn.textContent = "Close ✕";
+		closeBtn.style.cssText = `
+      float: right;
+      background: transparent;
+      border: none;
+      font-size: 1rem;
+      cursor: pointer;
+    `;
+		closeBtn.addEventListener("click", () => overlay.remove());
+
+		const title = document.createElement("h2");
+		title.textContent = drink.strDrink || "Cocktail";
+
+		const img = document.createElement("img");
+		if (drink.strDrinkThumb) {
+			img.src = drink.strDrinkThumb;
+			img.alt = drink.strDrink;
+			img.style.cssText = `
+        width: 100%;
+        max-width: 300px;
+        height: auto;
+        display: block;
+        margin-bottom: 10px;
+      `;
+		}
+
+		const info = document.createElement("p");
+		info.textContent = `${drink.strAlcoholic || ""} · ${drink.strCategory || ""}`;
+		info.style.marginTop = "0.25rem";
+
+		const instrTitle = document.createElement("h3");
+		instrTitle.textContent = "Instructions";
+
+		const instructions = document.createElement("p");
+		instructions.textContent = drink.strInstructions || "—";
+
+		const ingTitle = document.createElement("h3");
+		ingTitle.textContent = "Ingredients";
+
+		const ingList = document.createElement("ul");
+		const ingredients = this.collectIngredients(drink);
+		if (ingredients.length === 0) {
+			const li = document.createElement("li");
+			li.textContent = "—";
+			ingList.appendChild(li);
+		} else {
+			ingredients.forEach((it) => {
+				const li = document.createElement("li");
+				li.textContent = it;
+				ingList.appendChild(li);
+			});
+		}
+
+		modal.appendChild(closeBtn);
+		const contentWrapper = document.createElement("div");
+		contentWrapper.style.display = "flex";
+		contentWrapper.style.gap = "20px";
+		contentWrapper.style.alignItems = "flex-start";
+
+		const leftCol = document.createElement("div");
+		leftCol.style.flex = "0 0 320px";
+		if (img.src) leftCol.appendChild(img);
+
+		const rightCol = document.createElement("div");
+		rightCol.style.flex = "1";
+		rightCol.appendChild(title);
+		rightCol.appendChild(info);
+		rightCol.appendChild(instrTitle);
+		rightCol.appendChild(instructions);
+		rightCol.appendChild(ingTitle);
+		rightCol.appendChild(ingList);
+
+		contentWrapper.appendChild(leftCol);
+		contentWrapper.appendChild(rightCol);
+		modal.appendChild(contentWrapper);
+		overlay.appendChild(modal);
+
+		overlay.addEventListener("click", (e) => {
+			if (e.target === overlay) overlay.remove();
+		});
+
+		document.body.appendChild(overlay);
 	}
 
 
