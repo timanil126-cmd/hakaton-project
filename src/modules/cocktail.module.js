@@ -57,55 +57,24 @@ export class CocktailModule extends Module {
 
 		const overlay = document.createElement("div");
 		overlay.className = "cocktail-modal-overlay";
-		overlay.style.cssText = `
-      position: fixed;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: rgba(0,0,0,0.6);
-      z-index: 100000;
-    `;
 
 		const modal = document.createElement("div");
 		modal.className = "cocktail-modal";
-		modal.style.cssText = `
-      max-width: 800px;
-      width: 90%;
-      max-height: 85vh;
-      overflow: auto;
-      background: #fff;
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-      font-family: sans-serif;
-    `;
 
 		const closeBtn = document.createElement("button");
+		closeBtn.className = 'cocktail-modal__close-btn';
 		closeBtn.textContent = "Close ✕";
-		closeBtn.style.cssText = `
-      float: right;
-      background: transparent;
-      border: none;
-      font-size: 1rem;
-      cursor: pointer;
-    `;
+
 		closeBtn.addEventListener("click", () => overlay.remove());
 
 		const title = document.createElement("h2");
-		title.textContent = drink.strDrink || "Cocktail";
+		title.textContent = drink.strDrink || "Drink";
 
 		const img = document.createElement("img");
 		if (drink.strDrinkThumb) {
+			img.className = 'cocktail-modal__img';
 			img.src = drink.strDrinkThumb;
 			img.alt = drink.strDrink;
-			img.style.cssText = `
-        width: 100%;
-        max-width: 300px;
-        height: auto;
-        display: block;
-        margin-bottom: 10px;
-      `;
 		}
 
 		const info = document.createElement("p");
