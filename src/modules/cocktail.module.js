@@ -21,7 +21,7 @@ export class Cocktail extends Module {
 
 		} catch (error) {
 			console.error('Ошибка при получении коктейля:', error);
-			return
+			return null
 		}
 	}
 }
