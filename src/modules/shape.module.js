@@ -1,74 +1,73 @@
-import {Module} from '../core/module'
-import {random} from '../utils'
+import { Module } from "../core/module";
+import { random } from "../utils";
 
 export class ShapeModule extends Module {
-    constructor(){
-        super('shape','случайная фигура')
-    }
+	constructor() {
+		super("shape", "Случайная фигура");
+	}
 
-    trigger(){
-        this.createRandomSheape()
-    }
-    
-    createRandomSheape(){
-        const body = document.querySelector('body')
-        body.style.position = 'relative'
-        function getRandomColor() {
-            let letters = "0123456789ABCDEF";
-            let color = "#";
-            for (let i = 0; i < 6; i++) {
-            color += letters[Math.floor(Math.random() * 16)];
-            }
-            return color;
-        }
+	trigger() {
+		this.createRandomSheape();
+	}
 
+	getRandomColor() {
+		let letters = "0123456789ABCDEF";
+		let color = "#";
+		for (let i = 0; i < 6; i++) {
+			color += letters[Math.floor(Math.random() * 16)];
+		}
+		return color;
+	}
 
-        const availHeight = window.innerHeight
-        const availWidth = window.innerWidth
-        const size = random(50,200)
-        const distanceRelativeToScreenHeight = random(0,availHeight-size)
-        const distanceRelativeToScreenWidth = random(0,availWidth-size)
+	createRandomSheape() {
+		const body = document.querySelector("body");
+		body.style.position = "relative";
 
-        const shape = document.createElement('div')
-        const shapes = ['circle','square','triangle']
-        const randomShape = shapes[random(0,shapes.length-1)]
+		const availHeight = window.innerHeight;
+		const availWidth = window.innerWidth;
+		const size = random(50, 200);
+		const distanceRelativeToScreenHeight = random(0, availHeight - size);
+		const distanceRelativeToScreenWidth = random(0, availWidth - size);
 
-		shape.style.cssText = `
-            position: absolute;
-            width: ${size}px;
-            height: ${size}px;
-            background: ${getRandomColor()};
-            top: ${distanceRelativeToScreenHeight}px;
-            left: ${distanceRelativeToScreenWidth}px;
-            border-radius: ${randomShape === "circle" ? "50%" : "0"};
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        `;
-        if(randomShape==='triangle'){//css не умеет рисовать треугольники напрямую
-            shape.style.width = '0'//длинна 0
-            shape.style.height = '0'//высота 0
-            shape.style.background = 'transparent'//прозрачный фон 
-            shape.style.borderLeft =`${size / 2}px solid transparent`//два прозрачных края
-            shape.style.borderRight = `${size / 2}px solid transparent`//два прозрачных края
-            shape.style.borderBottom = `${size}px solid ${getRandomColor()}`
-        }
-    
+		const shape = document.createElement("div");
+		const shapes = ["circle", "square", "triangle"];
+		const randomShape = shapes[random(0, shapes.length - 1)];
 
+		const isTriangle = randomShape === "triangle";
 
-        shape.addEventListener('mouseover',()=>{
-            // shape.style.background = getRandomColor()
-            shape.style.transform = 'scale(2)'
-        })
-        shape.addEventListener('mouseleave',()=>{
-            shape.style.transform = 'scale(1)'
-        })
-        shape.addEventListener('click',()=>{
-            shape.remove()
-        })
-        
-      
+		shape.style.position = "absolute";
+		shape.style.width = `${isTriangle ? 0 : size}px`;
+		shape.style.height = `${isTriangle ? 0 : size}px`;
+		shape.style.background = isTriangle
+			? "transparent"
+			: this.getRandomColor();
+		shape.style.top = `${distanceRelativeToScreenHeight}px`;
+		shape.style.left = `${distanceRelativeToScreenWidth}px`;
+		shape.style.borderRadius = randomShape === "circle" ? "50%" : "0";
+		shape.style.cursor = "pointer";
+		shape.style.transition = "transform 0.3s ease";
+		shape.style.borderLeft = isTriangle
+			? `${size / 2}px solid transparent`
+			: "";
+		shape.style.borderRight = isTriangle
+			? `${size / 2}px solid transparent`
+			: "";
+		shape.style.borderBottom = isTriangle
+			? `${size}px solid ${this.getRandomColor()}`
+			: "";
 
-        body.append(shape)
-    }
+		shape.addEventListener("mouseover", () => {
+			shape.style.transform = "scale(2)";
+		});
 
+		shape.addEventListener("mouseleave", () => {
+			shape.style.transform = "scale(1)";
+		});
+
+		shape.addEventListener("click", () => {
+			shape.remove();
+		});
+
+		body.append(shape);
+	}
 }
