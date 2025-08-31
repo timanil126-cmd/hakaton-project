@@ -304,3 +304,43 @@ body {
 .game-duck {
     animation: duckFloat 3s infinite ease-in-out;
 }
+
+/* Стили для cocktail модуля */
+
+.cocktail-modal-overlay {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.6);
+    z-index: 100000;
+}
+
+.cocktail-modal {
+    max-width: 800px;
+    width: 90%;
+    max-height: 85vh;
+    overflow: auto;
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    font-family: sans-serif;
+}
+
+.cocktail-modal__close-btn {
+    float: right;
+    background: transparent;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.cocktail-modal__img {
+    width: 100%;
+    max-width: 300px;
+    height: auto;
+    display: block;
+    margin-bottom: 10px;
+}
