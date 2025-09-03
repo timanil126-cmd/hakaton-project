@@ -10,15 +10,23 @@ export class RandomQuoteModule extends Module {
     this.showQuote();
   }
 
+  placeQuoteRandomly(element) {
+    const side = Math.random() < 0.5 ? 'right' : 'left';
+    Object.assign(element.style, {
+      [side]: `${Math.ceil(Math.random() * 50)}px`,
+      top: `${Math.ceil(Math.random() * (window.innerHeight - 100))}px`,
+    });
+  }
+
   showQuote() {
     const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
     const randomQuoteHTML = document.createElement('div');
     randomQuoteHTML.className = 'quote-container';
     randomQuoteHTML.innerHTML = `<p class="quote-text">${randomQuote.text}</p>
-    <p class="quote-author">${randomQuote.author}</p>`;
 
-    // randomQuoteHTML.textContent = randomQuote.text + randomQuote.author;
-    console.log(randomQuoteHTML);
+    <p class="quote-author">${randomQuote.author}</p>`;
+    this.placeQuoteRandomly(randomQuoteHTML);
+
     document.body.append(randomQuoteHTML);
     setTimeout(() => {
       randomQuoteHTML.remove();
